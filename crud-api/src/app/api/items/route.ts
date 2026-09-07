@@ -8,7 +8,7 @@ export async function GET() {
     const items = await prisma.item.findMany();
 
     return NextResponse.json(items);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch items" },
       { status: 500 }
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(item, { status: 201 });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to create item" },
       { status: 500 }
@@ -69,7 +69,7 @@ export async function PUT(request: Request) {
     });
 
     return NextResponse.json(updatedItem);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to update item" },
       { status: 500 }
@@ -99,7 +99,7 @@ export async function DELETE(request: Request) {
     return NextResponse.json({
       message: "Item deleted successfully",
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to delete item" },
       { status: 500 }

@@ -1,62 +1,242 @@
-# Assignment: CRUD Operations Implementation 
+# CRUD Operations API
 
-## Introduction  
-In this exercise, we will create a **CRUD (Create, Read, Update, Delete)** API using **Next.js**, **TypeScript**, **Prisma**, and **PostgreSQL**. This application demonstrates how to interact with a database using an ORM (Object-Relational Mapping) tool like Prisma while leveraging the power of Next.js for backend API development. By the end of this exercise, you’ll have a fully functional API that supports CRUD operations, connects to a PostgreSQL database, and is deployable on AWS Elastic Beanstalk. You'll also learn how to test your API using Postman and configure environment variables for deployment.
+A full-stack CRUD API built with **Next.js, TypeScript, Prisma, and PostgreSQL**. The application provides REST API endpoints for creating, reading, updating, and deleting items.
 
-## Starter Files  
-The initial code is available inside the `start` folder under the `code` folder associated with this exercise.
+The project was developed as part of my Full Stack Development coursework and demonstrates database integration, API development, testing, and cloud deployment using AWS.
 
----
+## Technologies Used
 
-## Requirements  
+- Next.js
+- TypeScript
+- Node.js
+- Prisma ORM
+- PostgreSQL
+- Postman
+- AWS RDS
+- AWS Elastic Beanstalk
 
-We'll be working with Next.js, TypeScript, Prisma, and PostgreSQL to develop our CRUD API. Here's what we need to accomplish:
+## Features
 
-### Set Up the Development Environment  
-We need to:
-- Install **Node.js** (v18 or later) and **npm** (v9 or later) or **yarn**.  
-- Install **PostgreSQL** locally or use a cloud-hosted instance (e.g., AWS RDS).  
-- Set up the **AWS CLI** and ensure it’s configured with your AWS credentials (for deployment).  
-- Install **Postman** for testing API endpoints.  
+The API supports full CRUD functionality:
 
-### Build the Core Features  
-We need to implement the following functionalities:
+- **GET** - Retrieve all items
+- **POST** - Create a new item
+- **PUT** - Update an existing item
+- **DELETE** - Delete an existing item
 
-1. **Project Initialization:**  
-   - Scaffold a new Next.js project with TypeScript support.  
-   - Ensure all necessary dependencies are installed, including TypeScript type definitions.  
+The API also includes basic validation and error handling for invalid requests.
 
-2. **Database Integration with Prisma:**  
-   - Install and configure Prisma as the ORM layer.  
-   - Define a data model in the `schema.prisma` file.  
-   - Migrate the schema to the PostgreSQL database.  
+## Project Structure
 
-3. **CRUD Operations Implementation:**  
-   - Create API routes (`GET`, `POST`, `PUT`, `DELETE`) in the `app/api/items/route.ts` file.  
-   - Use Prisma Client to interact with the database for each operation.  
+crud-api/
+├── prisma/
+│   ├── migrations/
+│   └── schema.prisma
+├── public/
+├── src/
+│   └── app/
+│       ├── api/
+│       │   └── items/
+│       │       └── route.ts
+│       ├── layout.tsx
+│       └── page.tsx
+├── .gitignore
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+└── README.md
 
-4. **API Testing:**  
-   - Test the API endpoints using Postman.  
-   - Verify that the API handles valid and invalid inputs correctly.  
+## Database Model
 
-5. **Deployment Preparation:**  
-   - Build the application using `npm run build`.  
-   - Deploy the application to AWS Elastic Beanstalk.  
-   - Configure environment variables (e.g., `DATABASE_URL`) in the AWS environment.  
+The application uses the following Prisma model:
 
----
+model Item {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
 
-## Deliverables  
 
-The deliverable of this exercise is a working CRUD API that meets all the requirements above. We need to submit:
-- The public GitHub repository containing the source code.  
-- Screenshots showing:  
-  - The API responses for each CRUD operation tested in Postman.  
-  - The deployed application running on AWS Elastic Beanstalk.  
-- A brief README file explaining how to set up and run the app locally and how to deploy it to AWS.
+## API Endpoints
 
----
+All CRUD operations are available through:
 
-## Conclusion  
+/api/items
 
-this exercise provides a hands-on opportunity to build a fully functional CRUD API using modern technologies like Next.js, TypeScript, Prisma, and PostgreSQL. By following the steps outlined, you will gain practical experience in setting up a development environment, implementing database-driven API endpoints, testing your application, and deploying it to AWS Elastic Beanstalk. This project not only reinforces your understanding of backend development but also equips you with essential skills for building scalable, real-world applications
+
+### GET
+
+Retrieves all items.
+
+GET /api/items
+
+
+### POST
+
+Creates a new item.
+
+POST /api/items
+
+
+Example request body:
+
+```json
+{
+  "name": "Laptop",
+  "description": "Development laptop"
+}
+```
+
+### PUT
+
+Updates an existing item.
+
+PUT /api/items
+
+
+Example request body:
+
+```json
+{
+  "id": 1,
+  "name": "Gaming Laptop",
+  "description": "Updated development laptop"
+}
+```
+
+### DELETE
+
+Deletes an existing item.
+
+DELETE /api/items
+
+Example request body:
+
+```json
+{
+  "id": 1
+}
+```
+
+## Local Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone <your-repository-url>
+cd crud-api
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file in the project root:
+
+DATABASE_URL="postgresql://USERNAME:PASSWORD@HOST:5432/DATABASE_NAME?schema=public"
+
+The `.env` file is excluded from version control to prevent database credentials from being committed to the repository.
+
+### 4. Generate Prisma Client
+
+```bash
+npx prisma generate
+```
+
+### 5. Run Database Migrations
+
+```bash
+npx prisma migrate dev
+```
+
+### 6. Start the Development Server
+
+```bash
+npm run dev
+```
+
+The application will be available at:
+
+http://localhost:3000
+
+The API can be accessed at:
+
+http://localhost:3000/api/items
+
+
+## Testing
+
+The API was tested using **Postman**.
+
+Testing included:
+
+- Creating valid items
+- Retrieving items
+- Updating existing items
+- Deleting items
+- Testing invalid requests
+- Verifying HTTP status codes
+- Confirming database changes
+
+Example validation behavior:
+
+A POST request without a required `name` returns:
+
+```json
+{
+  "error": "Name is required"
+}
+```
+
+with HTTP status:
+
+400 Bad Request
+
+
+## Production Build
+
+The application can be compiled for production using:
+
+```bash
+npm run build
+```
+
+The production server can then be started with:
+
+```bash
+npm start
+```
+
+## AWS Deployment
+
+The application is deployed using **AWS Elastic Beanstalk**.
+
+The production architecture consists of:
+
+
+Client / Postman
+       |
+       v
+AWS Elastic Beanstalk
+       |
+       v
+Next.js API
+       |
+       v
+Prisma ORM
+       |
+       v
+Amazon RDS PostgreSQL
+
+
+Amazon RDS hosts the PostgreSQL database, while Elastic Beanstalk hosts the Next.js application.
+
+The production `DATABASE_URL` is configured using Elastic Beanstalk environment properties rather than storing credentials in the source code.
+
+Database access is controlled using AWS security groups.
